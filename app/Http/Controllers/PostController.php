@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class PostController extends Controller
 {
@@ -14,6 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
+        // ->whereDate('created_at',  '>=',Carbon::now()->subDays(7))
         $posts = Post::orderBy('created_at', 'desc')->get();
         // dd($posts);
         return view('post/list', compact('posts'));
@@ -42,12 +44,14 @@ class PostController extends Controller
         $post->title       = $request->input('title');
         $post->description = $request->input('description');
         // store image
-        $imageName = time() . '-' . $request->title . '.' . $request->image->extension();
-        $request->image->move(public_path('images'), $imageName);
+        if($request->hasFile('image')){
+            $imageName = time() . '-' . $request->title . '.' . $request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+        }
         //-- store image
         $post->image       = $imageName;
         $post->save();
-        return redirect()->route('posts.index');
+        return redirect()->route('posts.index')->with('status', 'Post added successfully');
     }
 
     /**
@@ -84,9 +88,21 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
+        $destination = public_path('images').$post->image;
+        if(File::exists($destination)){
+            File::delete($destination);
+        }
+
         $post->title       = $request->input('title');
         $post->description = $request->input('description');
-        $post->save();
+        // store image
+        if($request->hasFile('image')){
+            $imageName = time() . '-' . $request->title . '.' . $request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+        }
+        //-- store image
+        $post->image       = $imageName;
+        $post->update();
 
         return redirect()->back();
 

@@ -30,7 +30,7 @@
                                 style="border-radius: 50%"
                                 width= "90" height= "90" alt="image">
                             </td>
-                            <td>{{ $post->created_at }}</td>
+                            <td>{{ $post->created_at->format('d/m/Y') }}</td>
                             <td>
                                 <ul style="list-style-type: none">
                                     <li>
