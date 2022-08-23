@@ -47,9 +47,11 @@ class PostController extends Controller
         if($request->hasFile('image')){
             $imageName = time() . '-' . $request->title . '.' . $request->image->extension();
             $request->image->move(public_path('images'), $imageName);
+            $post->image       = $imageName;
+            // $post->save();
         }
         //-- store image
-        $post->image       = $imageName;
+        // $post->image       = $imageName;
         $post->save();
         return redirect()->route('posts.index')->with('status', 'Post added successfully');
     }

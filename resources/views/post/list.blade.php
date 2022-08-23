@@ -33,12 +33,12 @@
                             <td>{{ $post->created_at->format('d/m/Y') }}</td>
                             <td>
                                 <ul style="list-style-type: none">
-                                    <li>
+                                    <li style="display: inline-block;">
                                         <a href="{{ route('posts.edit', $post->id) }}">
                                             <button style="margin-bottom: 5px; margin-top: 5px" type="submit" class="btn btn-primary">Edit</button>
                                         </a>
                                     </li>
-                                    <li>
+                                    <li style="display: inline-block;">
                                         <form action="{{ route('posts.destroy',$post->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
