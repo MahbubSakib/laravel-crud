@@ -90,6 +90,7 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
+        // delete the previous image
         $destination = public_path('images').$post->image;
         if(File::exists($destination)){
             File::delete($destination);
